@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="BureauHexagonal.Api/BureauHexagonal.Api.csproj" />
+    <Project Path="BureauHexagonal.Application/BureauHexagonal.Application.csproj" />
+    <Project Path="BureauHexagonal.Core/BureauHexagonal.Core.csproj" />
+    <Project Path="BureauHexagonal.Infrastructure/BureauHexagonal.Infrastructure.csproj" />
+  </Folder>
+</Solution>
