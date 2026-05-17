@@ -37,6 +37,20 @@ namespace BureauHexagonal.Core.Common.NotificationError
             _friendlyMessages.Add(friendlyMessage);
         }
 
+        public static NotificationErrors Create(Exception exception)
+        {
+            int exceptionCounter = 1;
+            var notificationErrors = Create(nameof(exception), exception.Message);
+
+            while (exception.InnerException != null)
+            {
+                notificationErrors.AddError(nameof(exception) + "_" + (++exceptionCounter).ToString(), exception.InnerException.Message);
+                exception = exception.InnerException;
+            }
+
+            return notificationErrors;
+        }
+
         public bool HaveError()
         {
             return _errors.Count > 0;

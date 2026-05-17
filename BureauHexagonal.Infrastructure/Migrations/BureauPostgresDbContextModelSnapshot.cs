@@ -54,7 +54,7 @@ namespace BureauHexagonal.Infrastructure.Migrations
                         .HasColumnType("json")
                         .HasColumnName("data");
 
-                    b.Property<DateTimeOffset>("DeletedAt")
+                    b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_at");
 
@@ -77,7 +77,7 @@ namespace BureauHexagonal.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("synchronized");
 
-                    b.Property<DateTimeOffset>("UpdatedAt")
+                    b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 

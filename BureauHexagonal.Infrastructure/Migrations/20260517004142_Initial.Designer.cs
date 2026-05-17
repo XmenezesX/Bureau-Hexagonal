@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BureauHexagonal.Infrastructure.Migrations
 {
     [DbContext(typeof(BureauPostgresDbContext))]
-    [Migration("20260516012821_CriarTabelaBureau")]
-    partial class CriarTabelaBureau
+    [Migration("20260517004142_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace BureauHexagonal.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("BureauHexagonal.Infrastructure.DataBase.Postgres.Entities.Bureau", b =>
+            modelBuilder.Entity("BureauHexagonal.Infrastructure.DataBase.Postgres.Entities.BureauInfraEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,7 +57,7 @@ namespace BureauHexagonal.Infrastructure.Migrations
                         .HasColumnType("json")
                         .HasColumnName("data");
 
-                    b.Property<DateTimeOffset>("DeletedAt")
+                    b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_at");
 
@@ -80,11 +80,17 @@ namespace BureauHexagonal.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("synchronized");
 
-                    b.Property<DateTimeOffset>("UpdatedAt")
+                    b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BureauType");
+
+                    b.HasIndex("Code");
+
+                    b.HasIndex("ProviderType");
 
                     b.ToTable("bureau");
                 });

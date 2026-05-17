@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BureauHexagonal.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class CriarTabelaBureau : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,13 +25,28 @@ namespace BureauHexagonal.Infrastructure.Migrations
                     data = table.Column<string>(type: "json", nullable: false),
                     synchronized = table.Column<bool>(type: "boolean", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_bureau", x => x.id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_bureau_bureau_type",
+                table: "bureau",
+                column: "bureau_type");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_bureau_code",
+                table: "bureau",
+                column: "code");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_bureau_provider_type",
+                table: "bureau",
+                column: "provider_type");
         }
 
         /// <inheritdoc />

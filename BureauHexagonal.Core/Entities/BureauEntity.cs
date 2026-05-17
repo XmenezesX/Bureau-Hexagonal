@@ -19,12 +19,12 @@ namespace BureauHexagonal.Core.Entities
 
         private BureauEntity(){}
 
-        public static IOperation<BureauEntity> Create(Guid id, string code, ProviderType providerType, BureauType bureauType, string responseProviderJson, string dataBureau, bool synchronized)
+        public static IOperation<BureauEntity> ConceptualCreate(string code, ProviderType providerType, BureauType bureauType, string responseProviderJson, string dataBureau, bool synchronized)
         {
             var entity = new BureauEntity
             {
-                Id = id,
-                Code = code,
+                Id = Guid.NewGuid(),
+                Code = code.OnlyNumbers(),
                 ProviderType = providerType,
                 ResponseProviderJson = responseProviderJson,
                 DataBureau = dataBureau,
@@ -40,6 +40,36 @@ namespace BureauHexagonal.Core.Entities
                 return OperationFactory.CreateFail<BureauEntity>(notification, ErrorType.ValidationError);
 
             return entity.ToSuccess();
+        }
+
+        public static BureauEntity Restore(
+            in Guid id,
+            string code,
+            in ProviderType providerType,
+            in BureauType bureauType,
+            string responseProviderJson,
+            string dataBureau,
+            in bool synchronized,
+            DateTimeOffset createdAt,
+            DateTimeOffset? updatedAt,
+            DateTimeOffset? deletedAt
+        )
+        {
+            return new BureauEntity
+            {
+                Id = id,
+                Code = code,
+                ProviderType = providerType,
+                ResponseProviderJson = responseProviderJson,
+                DataBureau = dataBureau,
+                Synchronized = synchronized,
+                BureauType = bureauType,
+                BureauTypeDescription = BureauTypeDescriptor.Value[bureauType],
+                ProviderTypeDescription = ProviderTypeDescriptor.Value[providerType],
+                CreatedAt = createdAt,
+                UpdatedAt = updatedAt,
+                DeletedAt = deletedAt
+            };
         }
 
         public override NotificationErrors Validate()

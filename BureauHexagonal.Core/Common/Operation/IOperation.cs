@@ -94,6 +94,16 @@ namespace BureauHexagonal.Core.Common.Operation
             return new OperationFail<T>(notificationErrors, errorType);
         }
 
+        public static IOperationFail CreateFail(Exception exception)
+        {
+            return new OperationFail<object>(NotificationErrors.Create(exception), ErrorType.ExceptionError);
+        }
+
+        public static IOperationFail<T> CreateFail<T>(Exception exception)
+        {
+            return new OperationFail<T>(NotificationErrors.Create(exception), ErrorType.ExceptionError);
+        }
+
         public static IOperationFail CreateFail()
         {
             return new OperationFail<object>(NotificationErrors.Empty, ErrorType.UndefinedError);

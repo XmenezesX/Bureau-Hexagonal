@@ -1,9 +1,13 @@
-﻿using BureauHexagonal.Core.Ports;
+﻿using BureauHexagonal.Application.UnitOfWork;
+using BureauHexagonal.Core.Enums;
+using BureauHexagonal.Core.Ports;
 using BureauHexagonal.Infrastructure.Adapters.Cep;
 using BureauHexagonal.Infrastructure.Adapters.Cep.Gateway;
 using BureauHexagonal.Infrastructure.DataBase.Postgres;
+using BureauHexagonal.Infrastructure.DataBase.Postgres.UnitOfWork;
 using BureauHexagonal.Infrastructure.Options.DataBase;
 using BureauHexagonal.Infrastructure.Options.Provider;
+using BureauHexagonal.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,20 +23,36 @@ namespace BureauHexagonal.Infrastructure
         {
             return services
                    .AddOptions(configuration)
-                   .AddPostgress(configuration)
-                   .AddPortsAndAdapters()
+                   .AddPortsAndAdaptersServices()
+                   .AddRepository(configuration)
                    .AddViaCep(configuration);
         }
 
-        public static IServiceCollection AddPortsAndAdapters(this IServiceCollection services)
+        private static IServiceCollection AddPortsAndAdaptersServices(this IServiceCollection services)
         {
-            services.AddScoped<ISearchCepPort, SearchViaCepAdapter>();
-            
+            services.AddKeyedScoped<ISearchCepPort, SearchViaCepAdapter>(ProviderType.ViaCep);
+
+            return services;
+        }
+
+        private static IServiceCollection AddRepository(this IServiceCollection services, IConfiguration configuration)
+        {
+            var dataBaseOptions = configuration.GetRequiredSection(DataBaseOptions.SectionName).Get<DataBaseOptions>()!;
+
+            if (dataBaseOptions.UseDataBaseType == StorageType.Postgres)
+                return services.AddPostgress(configuration);
+
+            if (dataBaseOptions.UseDataBaseType == StorageType.Dynamo)
+            {
+                
+            }
+
             return services;
         }
 
         private static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddOptions<DataBaseOptions>().Bind(configuration.GetSection(DataBaseOptions.SectionName));
             services.AddOptions<PostgresDbOptions>().Bind(configuration.GetSection(PostgresDbOptions.SectionName));
             services.AddOptions<ViaCepOptions>().Bind(configuration.GetSection(ViaCepOptions.SectionName));
 
@@ -44,6 +64,9 @@ namespace BureauHexagonal.Infrastructure
             var postgresOptions = configuration.GetRequiredSection(PostgresDbOptions.SectionName).Get<PostgresDbOptions>()!;
             services.AddDbContext<BureauPostgresDbContext>(options =>
                 options.UseNpgsql(postgresOptions.GetConnectionString()));
+
+            services.AddScoped<IBureauRepositoryPort, BureauPostgresRepositoryAdapter>();
+            services.AddScoped<IUnitOfWork, PostgresUnitOfWork>();
 
             return services;
         }

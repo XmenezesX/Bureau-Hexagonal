@@ -24,6 +24,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="DataBase\Postgres\Map\DomainToDataBaseMap.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\BureauHexagonal.Application\BureauHexagonal.Application.csproj" />
 	</ItemGroup>
 

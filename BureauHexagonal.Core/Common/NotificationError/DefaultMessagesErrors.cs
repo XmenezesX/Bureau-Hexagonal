@@ -29,10 +29,24 @@
         public const string EnumIsInvalid = "O enum é inválido.";
         public const string RequestIsNull = "Os dados da requisição não foram informados.";
         public const string BureauTypeInvalid = "O tipo de bureau informado é inválido para esta operação.";
+        public const string ProviderError = "Não foi possível obter uma resposta válida do provedor de busca.";
 
         // Validações de Data
         public static string InvalidDate(string field) => $"O campo {field} deve ser uma data válida.";
         public static string DateMustBeFuture(string field) => $"O campo {field} deve ser uma data futura.";
         public static string DateMustBePast(string field) => $"O campo {field} deve ser uma data passada.";
+
+        // Banco de Dados
+        public const string DatabaseConnectionError = "Não foi possível estabelecer conexão com o banco de dados.";
+        public const string DatabaseSaveError = "Ocorreu um erro ao tentar salvar os dados no banco.";
+        public const string DatabaseQueryError = "Houve uma falha ao processar a consulta no banco de dados.";
+        public const string TransactionCommitError = "Não foi possível confirmar a transação de dados.";
+        public const string EntityNotFoundMessage = "Registro não encontrado no banco de dados.";
+
+        public static string EntityNotFound(string field, string value) => $"O registro com {field} igual a {value} não foi encontrado.";
+        public static string RecordAlreadyExists(string entityName) => $"Já existe um registro de {entityName} cadastrado com esses dados.";
+        public static string DuplicateKey(string field) => $"O valor informado para o campo {field} já está em uso.";
+        public static string ConcurrencyError(string entityName) => $"O registro de {entityName} foi modificado ou excluído por outro usuário. Tente novamente.";
+        public static string ForeignKeyViolation(string entityName) => $"Não é possível processar a operação porque este registro está vinculado a outra informação de {entityName}.";
     }
 }

@@ -2,5 +2,5 @@
 
 namespace BureauHexagonal.Application.Dtos.Inputs
 {
-    public sealed record BureauInputDto(string ZipCode, ProviderType ProviderType, BureauType BureauType);
+    public sealed record BureauInputDto(string Code, ProviderType ProviderType, BureauType BureauType);
 }

@@ -16,11 +16,11 @@ namespace BureauHexagonal.Application.UseCases.CEP.Validation
 
             var notification = NotificationErrors.Empty;
 
-            if (string.IsNullOrWhiteSpace(input.ZipCode))
-                notification.AddError(nameof(input.ZipCode), DefaultMessagesErrors.FieldIsRequired(nameof(input.ZipCode)));
+            if (string.IsNullOrWhiteSpace(input.Code))
+                notification.AddError(nameof(input.Code), DefaultMessagesErrors.FieldIsRequired(nameof(input.Code)));
 
-            if (input.ZipCode is not null && input.ZipCode.Length != ZipCodeLength)
-                notification.AddError(nameof(input.ZipCode), DefaultMessagesErrors.ExactLength(nameof(input.ZipCode), ZipCodeLength));
+            if (input.Code is not null && input.Code.Length != ZipCodeLength)
+                notification.AddError(nameof(input.Code), DefaultMessagesErrors.ExactLength(nameof(input.Code), ZipCodeLength));
 
             if (!EnumUtils.IsValidEnum(input.ProviderType))
                 notification.AddError(nameof(input.ProviderType), DefaultMessagesErrors.EnumIsInvalid, "É necessário informar um provedor válido");
