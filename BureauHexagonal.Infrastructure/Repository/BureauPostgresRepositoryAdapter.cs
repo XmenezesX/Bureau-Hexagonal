@@ -49,6 +49,27 @@ namespace BureauHexagonal.Infrastructure.Repository
             return response.ToSuccess();
         }
 
+        public async Task<IOperation<BureauEntity>> GetByCodeAndProviderAsync(string code, ProviderType providerType)
+        {
+            string codeOnlyNumbers = code.OnlyNumbers();
+            var result = await dbContext.Bureau
+                            .AsNoTracking()
+                            .Where(x => x.Code == codeOnlyNumbers &&
+                                        x.ProviderType == providerType.GetHashCode() &&
+                                        x.DeletedAt == null)
+                            .FirstOrDefaultAsync();
+
+            if (result is null)
+            {
+                var notification = NotificationErrors.Create(nameof(result), DefaultMessagesErrors.EntityNotFoundMessage);
+                return notification.ToFail<BureauEntity>(ErrorType.EntityNotFound);
+            }
+
+            var response = DataBaseToDomainMap.Map<BureauEntity>(result);
+
+            return response.ToSuccess();
+        }
+
         public async Task<IOperation<BureauEntity>> GetByCodeAsync(string code)
         {
             string codeOnlyNumbers = code.OnlyNumbers();

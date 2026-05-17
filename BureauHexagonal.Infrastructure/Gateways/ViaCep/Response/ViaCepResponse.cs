@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace BureauHexagonal.Infrastructure.Adapters.Cep.Gateway.Response
+namespace BureauHexagonal.Infrastructure.Gateways.ViaCep.Response
 {
     public sealed class ViaCepResponse
     {

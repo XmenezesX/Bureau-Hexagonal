@@ -3,8 +3,8 @@ using BureauHexagonal.Core.Common.NotificationError;
 using BureauHexagonal.Core.Common.Operation;
 using BureauHexagonal.Core.Enums;
 using BureauHexagonal.Core.Ports;
-using BureauHexagonal.Infrastructure.Gateways.ViaCep;
-using BureauHexagonal.Infrastructure.Gateways.ViaCep.Response;
+using BureauHexagonal.Infrastructure.Gateways.BrasilApi;
+using BureauHexagonal.Infrastructure.Gateways.BrasilApi.Response;
 using BureauHexagonal.Infrastructure.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -12,13 +12,15 @@ using System.Text.Json;
 
 namespace BureauHexagonal.Infrastructure.Adapters.Cep
 {
-    public sealed class SearchViaCepAdapter(ILogger<SearchViaCepAdapter> _logger,
-                                            IServiceProvider _serviceProvider) : ISearchCepPort
+    public sealed class SearchBrasiApiCepAdapter(ILogger<SearchViaCepAdapter> _logger,
+                                                 IServiceProvider _serviceProvider) : ISearchCepPort
     {
+        private const string NotSearch = "Não informado";
+
         public async Task<IOperation<CepSearchResponseDto>> SearchAsync(string zipCode)
         {
-            var viaCepGateway = _serviceProvider.GetRequiredService<IViaCepGateway>();
-            var result = await viaCepGateway.GetAddress(zipCode);
+            var result = await _serviceProvider.GetRequiredService<IBrasilApiGateway>()
+                                               .GetAddress(zipCode);
 
             if (result.IsErrorResponseApi())
             { 
@@ -26,21 +28,21 @@ namespace BureauHexagonal.Infrastructure.Adapters.Cep
                 return OperationFactory.CreateFail<CepSearchResponseDto>(notifcation, ErrorType.ProviderError);
             }
 
-            var responseGateway = JsonSerializer.Deserialize<ViaCepResponse>(result.Content!)!;
+            var responseGateway = JsonSerializer.Deserialize<BrasilApiCepResponse>(result.Content!)!;
 
             var response = new CepSearchResponseDto
             {
                 ZipCode = zipCode,
-                DDD = responseGateway.DDD,
-                IbgeCode = responseGateway.Ibge,
-                Neighborhood = responseGateway.Bairro,
-                City = responseGateway.Localidade,
-                Complement = responseGateway.Complemento,
-                State = responseGateway.UF,
-                Street = responseGateway.Logradouro,
+                State = responseGateway.State,
+                City = responseGateway.City,
+                Neighborhood = responseGateway.Neighborhood ?? NotSearch,
+                Street = responseGateway.Street ?? NotSearch,
                 Number = "S/N",
                 ResponseProvider = result.Content!,
-                ProviderType = ProviderType.ViaCep,
+                ProviderType = ProviderType.BrasilApi,
+                Complement = null,
+                IbgeCode = null,
+                DDD = null,
             };
 
             return response.ToSuccess();

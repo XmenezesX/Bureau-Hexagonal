@@ -24,7 +24,7 @@ namespace BureauHexagonal.Application.UseCases.CEP
 
                 var bureauRepositry = _serviceProvider.GetRequiredService<IBureauRepositoryPort>();
 
-                var operation = await bureauRepositry.GetByCodeAsync(input.Code);
+                var operation = await bureauRepositry.GetByCodeAndProviderAsync(input.Code, input.ProviderType);
                 if (operation.IsSuccess())
                 {
                     var bureauEntity = operation.SuccessAs<BureauEntity>();

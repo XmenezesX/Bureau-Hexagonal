@@ -7,6 +7,7 @@ namespace BureauHexagonal.Core.Ports
     public interface IBureauRepositoryPort
     {
         Task<IOperation<BureauEntity>> GetByCodeAsync(string code);
+        Task<IOperation<BureauEntity>> GetByCodeAndProviderAsync(string code, ProviderType providerType);
         Task<IOperation<IEnumerable<BureauEntity>>> GetByProviderAsync(ProviderType providerType);
         Task<IOperation<IEnumerable<BureauEntity>>> GetByBureautypeAsync(BureauType bureauType);
         Task<IOperation> CreateAsync(BureauEntity entity);

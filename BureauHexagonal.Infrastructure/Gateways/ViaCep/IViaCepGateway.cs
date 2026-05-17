@@ -1,6 +1,6 @@
 ﻿using Refit;
 
-namespace BureauHexagonal.Infrastructure.Adapters.Cep.Gateway
+namespace BureauHexagonal.Infrastructure.Gateways.ViaCep
 {
     public interface IViaCepGateway
     {

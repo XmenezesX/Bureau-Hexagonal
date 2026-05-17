@@ -2,9 +2,10 @@
 using BureauHexagonal.Core.Enums;
 using BureauHexagonal.Core.Ports;
 using BureauHexagonal.Infrastructure.Adapters.Cep;
-using BureauHexagonal.Infrastructure.Adapters.Cep.Gateway;
 using BureauHexagonal.Infrastructure.DataBase.Postgres;
 using BureauHexagonal.Infrastructure.DataBase.Postgres.UnitOfWork;
+using BureauHexagonal.Infrastructure.Gateways.BrasilApi;
+using BureauHexagonal.Infrastructure.Gateways.ViaCep;
 using BureauHexagonal.Infrastructure.Options.DataBase;
 using BureauHexagonal.Infrastructure.Options.Provider;
 using BureauHexagonal.Infrastructure.Repository;
@@ -25,12 +26,14 @@ namespace BureauHexagonal.Infrastructure
                    .AddOptions(configuration)
                    .AddPortsAndAdaptersServices()
                    .AddRepository(configuration)
-                   .AddViaCep(configuration);
+                   .AddViaCep(configuration)
+                   .AddBrasilApi(configuration);
         }
 
         private static IServiceCollection AddPortsAndAdaptersServices(this IServiceCollection services)
         {
             services.AddKeyedScoped<ISearchCepPort, SearchViaCepAdapter>(ProviderType.ViaCep);
+            services.AddKeyedScoped<ISearchCepPort, SearchBrasiApiCepAdapter>(ProviderType.BrasilApi);
 
             return services;
         }
@@ -55,6 +58,7 @@ namespace BureauHexagonal.Infrastructure
             services.AddOptions<DataBaseOptions>().Bind(configuration.GetSection(DataBaseOptions.SectionName));
             services.AddOptions<PostgresDbOptions>().Bind(configuration.GetSection(PostgresDbOptions.SectionName));
             services.AddOptions<ViaCepOptions>().Bind(configuration.GetSection(ViaCepOptions.SectionName));
+            services.AddOptions<BrasilApiOptions>().Bind(configuration.GetSection(BrasilApiOptions.SectionName));
 
             return services;
         }
@@ -87,6 +91,27 @@ namespace BureauHexagonal.Infrastructure
                   httpClient.BaseAddress = new Uri(viaCepOptios.BaseUrl);
                   httpClient.Timeout = new TimeSpan(0, 0, viaCepOptios.TimeoutInSeconds);
                   httpClient.DefaultRequestHeaders.Clear();
+            });
+
+            return services;
+        }
+
+        private static IServiceCollection AddBrasilApi(this IServiceCollection services, IConfiguration configuration)
+        {
+            var brasilApiOptions = configuration.GetRequiredSection(BrasilApiOptions.SectionName).Get<BrasilApiOptions>()!;
+
+            services.AddRefitClient<IBrasilApiGateway>(new RefitSettings()
+            {
+                ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                })
+            })
+            .ConfigureHttpClient(httpClient =>
+            {
+                httpClient.BaseAddress = new Uri(brasilApiOptions.BaseUrl);
+                httpClient.Timeout = new TimeSpan(0, 0, brasilApiOptions.TimeoutInSeconds);
+                httpClient.DefaultRequestHeaders.Clear();
             });
 
             return services;
