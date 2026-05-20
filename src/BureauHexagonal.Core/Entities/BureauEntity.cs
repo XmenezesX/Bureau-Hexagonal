@@ -1,4 +1,4 @@
-﻿using BureauHexagonal.Core.Common.NotificationError;
+using BureauHexagonal.Core.Common.NotificationError;
 using BureauHexagonal.Core.Common.Operation;
 using BureauHexagonal.Core.Entities.Base;
 using BureauHexagonal.Core.Enums;
@@ -30,8 +30,8 @@ namespace BureauHexagonal.Core.Entities
                 DataBureau = dataBureau,
                 Synchronized = synchronized,
                 BureauType = bureauType,
-                BureauTypeDescription = BureauTypeDescriptor.Value[bureauType],
-                ProviderTypeDescription = ProviderTypeDescriptor.Value[providerType],
+                BureauTypeDescription = BureauTypeDescriptor.Value.GetValueOrDefault(bureauType, "Unknown")!,
+                ProviderTypeDescription = ProviderTypeDescriptor.Value.GetValueOrDefault(providerType, "Unknown")!,
                 CreatedAt = DateTime.UtcNow,
             };
 

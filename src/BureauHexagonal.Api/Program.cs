@@ -1,6 +1,7 @@
 using BureauHexagonal.Application;
 using BureauHexagonal.Infrastructure;
 using BureauHexagonal.Infrastructure.DataBase.Postgres;
+using BureauHexagonal.Api.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<ApiKeyMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -1,8 +1,12 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="BureauHexagonal.Api/BureauHexagonal.Api.csproj" />
-    <Project Path="BureauHexagonal.Application/BureauHexagonal.Application.csproj" />
-    <Project Path="BureauHexagonal.Core/BureauHexagonal.Core.csproj" />
-    <Project Path="BureauHexagonal.Infrastructure/BureauHexagonal.Infrastructure.csproj" />
+    <Project Path="E:/Estudos/C#/BureauHexagonal/src/BureauHexagonal.Api/BureauHexagonal.Api.csproj" />
+    <Project Path="E:/Estudos/C#/BureauHexagonal/src/BureauHexagonal.Application/BureauHexagonal.Application.csproj" />
+    <Project Path="E:/Estudos/C#/BureauHexagonal/src/BureauHexagonal.Core/BureauHexagonal.Core.csproj" />
+    <Project Path="E:/Estudos/C#/BureauHexagonal/src/BureauHexagonal.Infrastructure/BureauHexagonal.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="E:/Estudos/C#/BureauHexagonal/tests/BureauHexagonal.Test.Integration/BureauHexagonal.Test.Integration.csproj" />
+    <Project Path="E:/Estudos/C#/BureauHexagonal/tests/BureauHexagonal.Test.Unit/BureauHexagonal.Test.Unit.csproj" />
   </Folder>
 </Solution>

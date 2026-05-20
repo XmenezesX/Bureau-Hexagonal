@@ -1,4 +1,5 @@
 ﻿using BureauHexagonal.Core.Common.NotificationError;
+using System.Text.Json.Serialization;
 
 namespace BureauHexagonal.Core.Common.Operation
 {
@@ -35,6 +36,7 @@ namespace BureauHexagonal.Core.Common.Operation
     public interface IOperationFail : IOperation
     {
         NotificationErrors NotificationErrors { get; init; }
+
         ErrorType ErrorType { get; init; }
     }
 
@@ -55,11 +57,14 @@ namespace BureauHexagonal.Core.Common.Operation
             ErrorType = errorType;
         }
 
+        [JsonPropertyName("notificationErrors")]
         public NotificationErrors NotificationErrors { get; init; }
-
-        public string ErrorTypeDescription => ErrorType.ToString();
-
+        
+        [JsonPropertyName("errorType")]
         public ErrorType ErrorType { get; init; }
+
+        [JsonPropertyName("errorTypeDescription")]
+        public string ErrorTypeDescription => ErrorType.ToString();
     }
 
     public static class OperationFactory
